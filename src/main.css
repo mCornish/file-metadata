@@ -80,6 +80,7 @@ a:hover .logo {
     height: 2.5em;
     fill: rgb(0,90,170);
     margin-left: 5em;
+    transition: fill .2s;
 }
 .github-link svg:hover {
     fill: rgb(250,250,250);
