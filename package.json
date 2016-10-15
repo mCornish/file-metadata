@@ -1,20 +1,35 @@
 {
-  "name": "mc-image-search",
+  "name": "mc-metadata",
   "version": "1.0.0",
-  "description": "Google image search microservice",
+  "description": "Receive metadata for an uploaded file",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "concurrently 'npm run watch' 'node index.js'",
+    "test": "babel-node **/*-test.js | faucet",
+    "serve": "browser-sync start --proxy http://localhost:5000 --files *.{js,jsx,html,css} && node index.js",
+    "watch": "npm-watch"
   },
-  "repository": "https://github.com/mCornish/url-shortener",
-  "author": "",
-  "license": "ISC",
+  "watch": {
+    "test": "src/*{.js,.jsx}"
+  },
+  "repository": {
+    "url": "https://github.com/mCornish/file-metadata.git",
+    "type": "git"
+  },
+  "author": "Mike Cornish",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.14.0",
-    "fetch": "^1.1.0",
+    "faucet": "^0.0.1",
     "mongodb": "^2.2.10",
-    "node-fetch": "^1.6.3",
-    "whatwg-fetch": "^1.0.0"
+    "multer": "^1.2.0",
+    "tape": "^4.6.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.16.0",
+    "babel-preset-es2015": "^6.16.0",
+    "concurrently": "^3.1.0",
+    "npm-watch": "^0.1.6",
+    "watch": "^1.0.1"
   }
 }

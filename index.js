@@ -2,7 +2,8 @@ const express = require('express');
 const app = express();
 const MongoClient = require('mongodb').MongoClient;
 const path = require('path');
-const Searches = require('./src/Searches');
+const multer = require('multer');
+const upload = multer({dest: 'uploads/'});
 
 const MONGO_URL = process.env.MONGOLAB_URI;
 
@@ -19,16 +20,20 @@ app.get('/', (req, res) => {
 
 app.get('/favicon.ico', (req, res) => res.sendStatus(200)); // Ignore favicon request
 
-MongoClient.connect(MONGO_URL, (err, db) => {
-    if (err) {
-        console.log("Unable to connect to Mongo.");
-        process.exit(1);
-    } else {
-        app.get('/recent', Searches.findRecent.bind(null, db));
-        app.get('/:query', Searches.addOne.bind(null, db));
+const fileUpload = upload.single('file');
+app.post('/upload', (req, res) => {
+    fileUpload(req, res, err => {
+        if (err) {
+            console.log('ERROR: ', err);
+            res.send({"error": "Error uploading file"});
+        }
+        const result = {
+            size: req.file.size
+        }
+        res.send(result);
+    })
+});
 
-        app.listen(app.get('port'), () => {
-            console.log('Node app is running on port', app.get('port'));
-        });
-    }
-})
+app.listen(app.get('port'), () => {
+    console.log('Node app is running on port', app.get('port'));
+});

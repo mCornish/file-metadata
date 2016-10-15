@@ -1,5 +1,3 @@
-const fetch = require('node-fetch');
-
 const populateDb = require('./populate-db');
 
 const API_KEY = 'AIzaSyAUNNcfbS7-gf2hxJ1jt-LVIDU0wNuTjMY';
@@ -8,12 +6,6 @@ const NUM_RESULTS = 10;
 const FIELDS = 'items(link,image/thumbnailLink,snippet)';
 const REQUEST_BASE = `https://www.googleapis.com/customsearch/v1?cx=${ENGINE_ID}&num=${NUM_RESULTS}&searchType=image&fields=${FIELDS}&key=${API_KEY}`;
 
-const _getResults = (query, start) => {
-    const startInt = parseInt(start) || 0;
-    const queryString = `&q=${query}&start=${startInt + 1}`;
-    const requestUrl = REQUEST_BASE + queryString;
-    return fetch(requestUrl);
-};
 
 exports.addOne = (db, req, res) => {
     const query = req.params.query;
@@ -26,25 +18,7 @@ exports.addOne = (db, req, res) => {
         };
         collection.insert(search, (err, doc) => {
             if (!err && doc) {
-                _getResults(query, start)
-                    .then(response => {
-                        return response.json();
-                    })
-                    .then(json => {
-                        // Reformat JSON before returning
-                        const result = json.items.map(item => {
-                            return {
-                                "snippet": item.snippet,
-                                "thumbnail": item.image.thumbnailLink,
-                                "url": item.link
-                            };
-                        });
-                        res.send(result);
-                    })
-                    .catch(ex => {
-                        console.log('ERROR: ', ex);
-                        res.send(ex);
-                    });
+                res.send(result);
             } else {
                 res.json({'error': 'Unable to complete search'});
             }
