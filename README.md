@@ -1,2 +1,2 @@
-# Image Search Microservice
-A Google image search Express microservice. Available at [mcsearch.herokuapp.com](http://mcsearch.herokuapp.com).
+# File Size Retriever
+Express microservice that allows you to upload a file to receive back the file's size. Available at [mc-filesize.herokuapp.com](https://mc-filesize.herokuapp.com/).
